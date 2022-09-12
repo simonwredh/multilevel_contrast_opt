@@ -70,7 +70,7 @@ init_range_high: 5
 
 mutation_percent_genes: 1
 
-num_generations: 60
+num_generations: 20
 num_parents_mating: 10
 
 # # Thickness constraints during GA optimisation

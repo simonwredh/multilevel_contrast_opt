@@ -50,11 +50,6 @@ class ContrastOpt:
                 print("Generation : ", ga_instance.generations_completed)
                 print("Fitness of the best solution :", ga_instance.best_solution()[1])
 
-        # gene_space = [
-        #     {'low': 2, 'high': 20},
-        #     {'low': 2, 'high': 20},
-        #     {'low': 2, 'high': 8},
-        #     {'low': 2, 'high': 20}]
 
         self.ga_instance = pygad.GA(num_generations=self.num_generations,
                             num_parents_mating=self.num_parents_mating, 

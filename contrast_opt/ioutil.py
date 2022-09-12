@@ -40,27 +40,12 @@ def mkoutdir():
         os.mkdir(date_dir)
     return out_dir, date_dir
     
-OUTDIR, DATEDIR = mkoutdir()
-
-
 def savefig(fig_name, plt=plt, fig_handle=None):
     """
     Save figure in ./out/YYYY-MM-DD.
     """
-    # d = (str(date.today().year) + '-' +
-    #     str(date.today().month).zfill(2) + '-' +
-    #     str(date.today().day).zfill(2))
-
-    # out_dir = 'out'
-    # date_dir = 'out/'+d
-    # if not os.path.exists(out_dir):
-    #     os.mkdir(out_dir)
-    # if not os.path.exists(date_dir):
-    #     os.mkdir(date_dir)
-
-    # save_path = date_dir + '/' + fig_name
-
-    save_path = os.path.join(DATEDIR, fig_name)
+    out_dir, date_dir = mkoutdir()
+    save_path = os.path.join(date_dir, fig_name)
 
     if fig_handle is None:
         plt.gcf().savefig(save_path,bbox_inches='tight',facecolor='white',dpi=300)

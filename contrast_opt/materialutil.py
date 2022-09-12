@@ -5,11 +5,17 @@ import numpy as np
 from scipy.interpolate import interp1d
 
 def load_settings(settings_file = "indata.yaml"):
+    """
+    Loads input parameters for the multi-layer structure and optimisation routine from indata.yaml.
+    """
     with open(settings_file, "r") as file:
         settings_dict = yaml.load(file, Loader=yaml.Loader)
     return settings_dict
 
 def create_nk_dict(materials_dict):
+    """
+    Creates a dictonary containing the refractive index file paths for all relevant structure in the calculations.
+    """
     nk_dict = {}
     for material in materials_dict:
         for i,state in enumerate(material["states"]):
@@ -41,10 +47,18 @@ def generate_levels(layers, material_states):
     return levels
 
 def load_nk_from_text(material_data_path, skiprows=0):
+    """
+    Loads refractive index data from text files.
+    Data should be in format [lambda (nm)   n   k]
+    """
     material_nk = np.loadtxt(material_data_path, skiprows=skiprows)
     return material_nk
 
 def interp_nk(material_nk_data, wls):
+    """
+    Return interpolated values of refractive index data.
+    Wavelengths in nanometers.
+    """
     wl = material_nk_data[:,0] # Convert from nm to m
     n = material_nk_data[:,1]
     k = material_nk_data[:,2]
@@ -54,6 +68,10 @@ def interp_nk(material_nk_data, wls):
     return material_nk
 
 def generate_nk_tensor(levels, layers, wls, nk_dict, nk_data_path):
+    """
+    Generates the tensor containing refractive index data for all layers and material state combinations.
+    Shape: [num_levels, num_layers, num_wls]
+    """
     num_levels = len(levels)
     num_layers = len(layers)
     num_wls = len(wls)
