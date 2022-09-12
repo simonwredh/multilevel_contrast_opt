@@ -32,14 +32,14 @@ Constraints
 
 Create an environment and install necessary dependenceies:
 
-` conda env create --name contrast_opt --file environment.yml
+    conda env create --name contrast_opt --file environment.yml
 
-` conda activate contrast_opt
+    conda activate contrast_opt
 
 Install contrast_opt as a package:
 
-` pip install .
+    pip install .
 
 Run example in example directory:
 
-` python example.py
+    python example.py
