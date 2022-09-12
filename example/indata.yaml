@@ -55,30 +55,20 @@ layer_thickness: [
 # Need len(layer_thickness_range) == len(layers)
 layer_thickness_range: [
   [2,20],
-  [2,20],
+  [2,10],
   [2,20],
 ]
 
 
-
 ### Optimisation parameters ###
 
-sol_per_pop: 50
 
-init_range_low: -2
-init_range_high: 5
-
-mutation_percent_genes: 1
-
-num_generations: 20
+num_generations: 60
 num_parents_mating: 10
 
-# # Thickness constraints during GA optimisation
-# # Needs to correspond to the number of layers
-# gene_space: 
-# - low: 2
-#   high: 20
-# - low: 2
-#   high: 10
-# - low: 2
-#   high: 20
+sol_per_pop: 100
+
+init_range_low: 2
+init_range_high: 20
+
+mutation_percent_genes: 1
