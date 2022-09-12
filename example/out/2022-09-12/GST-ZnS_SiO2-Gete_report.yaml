@@ -1,4 +1,4 @@
-date: 20220912 15:34:01
+date: 20220912 16:15:10
 description: GST-ZnS_SiO2-Gete
 ambient: Air
 substrate: Si
@@ -7,6 +7,6 @@ layers:
 - ZnS_SiO2
 - GeTe
 optimal_thickness:
-- 8.668250084054288
-- 8.246839636769856
-- 19.706984905065458
+- 9.33690118719485
+- 6.599452580645034
+- 19.62424565878199

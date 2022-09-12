@@ -1,6 +1,8 @@
 # contrast_opt
 Contrast optimisation of multi-layer stacks
 
+## Information
+
 Objective:
 - Maximise optical contrast between different programmable states of a multi-layer PCM stack.
 
@@ -25,3 +27,19 @@ Cost function for optimisation:
 Constraints
 - The thickness range of each layer can be constrained in indata.yaml
 - Not implemented: total stack thickness
+
+## Usage
+
+Create an environment and install necessary dependenceies:
+
+` conda env create --name contrast_opt --file environment.yml
+
+` conda activate contrast_opt
+
+Install contrast_opt as a package:
+
+` pip install .
+
+Run example in example directory:
+
+` python example.py
