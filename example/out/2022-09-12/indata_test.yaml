@@ -1,0 +1,82 @@
+description: "GST-ZnS_SiO2-Gete"
+
+### Material data ###
+materials_path: "./materials"
+
+materials:
+- name: "GST"
+  states: ["GST_a","GST_c"]
+  nk_files: ["GST225amor.txt","GST225fcc.txt"]
+- name: "GeTe"
+  states: ["GeTe_a","GeTe_c"]
+  nk_files: ["GeTea.txt", "GeTec.txt"]
+- name: "Si"
+  states: ["Si"]
+  nk_files: ["Si.txt"]
+- name: "SiN"
+  states: ["SiN"]
+  nk_files: ["SiN.txt"]
+- name: "TiN"
+  states: ["TiN"]
+  nk_files: ["TiN.txt"]
+- name: "ZnS_SiO2"
+  states: ["ZnS_SiO2"]
+  nk_files: [ZnS_SiO2.txt]
+
+
+# Wavelength range
+lambda_min: 400
+lambda_max: 800
+lambda_ref: 650
+
+
+### Multi-level structure ###
+
+# Substrate and surrounding medium
+substrate: "Si"
+ambient: "Air" # Can be "Air"
+
+# Thin-film layers of the stack (0th layer is the top layer)
+layers: [
+    "GST",
+    "ZnS_SiO2",
+    "GeTe",
+]
+
+# Layer thicknesses
+layer_thickness: [
+  8,
+  5,
+  15,
+]
+
+# Thickness constraints for optimisation
+layer_thickness_range: [
+  [2,20],
+  [2,20],
+  [2,20],
+]
+
+
+
+### Optimisation parameters ###
+
+sol_per_pop: 50
+
+init_range_low: -2
+init_range_high: 5
+
+mutation_percent_genes: 1
+
+num_generations: 60
+num_parents_mating: 10
+
+# Thickness constraints during GA optimisation
+# Needs to correspond to the number of layers
+gene_space: 
+- low: 2
+  high: 20
+- low: 2
+  high: 10
+- low: 2
+  high: 20
