@@ -16,6 +16,8 @@ class MultiLayer:
         fig, ax = plt.subplots()
         for i,R in enumerate(self.reflectivity):
             plt.plot(self.wls, R, label=self.levels[i])
+        plt.xlabel("Wavelength (nm)")
+        plt.ylabel("Reflectivity")
         plt.legend()
         return fig, ax
 
