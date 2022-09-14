@@ -46,6 +46,7 @@ if __name__ == "__main__":
         "ambient": multilayer.ambient,
         "substrate": multilayer.substrate,
         "layers": multilayer.layers,
+        "lambda_ref": multilayer.lambda_ref,
         "optimal_thickness": contrastopt.optimal_thickness.tolist(), 
     }
     report_file_out = f"{stack_name}_report.yaml"
