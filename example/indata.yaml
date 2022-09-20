@@ -54,21 +54,20 @@ layer_thickness: [
 # Thickness constraints for optimisation
 # Need len(layer_thickness_range) == len(layers)
 layer_thickness_range: [
-  [2,20],
-  [2,10],
-  [2,20],
+  [2,20,1],
+  [2,10,1],
+  [2,20,1],
 ]
 
 
 ### Optimisation parameters ###
 
-
-num_generations: 60
+num_generations: 50
 num_parents_mating: 10
 
-sol_per_pop: 100
+sol_per_pop: 50
 
 init_range_low: 2
 init_range_high: 20
 
-mutation_percent_genes: 1
+mutation_percent_genes: 66

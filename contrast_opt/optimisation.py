@@ -56,8 +56,8 @@ class ContrastOpt:
                             fitness_func=fitness_func,
                             sol_per_pop=self.sol_per_pop, 
                             num_genes=self.num_layers,
-                            init_range_low=self.init_range_low,
-                            init_range_high=self.init_range_high,
+                            # init_range_low=self.init_range_low,
+                            # init_range_high=self.init_range_high,
                             mutation_percent_genes=self.mutation_percent_genes,
                             gene_space=self.gene_space,
                             on_generation=callback_gen)
@@ -82,8 +82,8 @@ class ContrastOpt:
     def load_data(self, indata_file):
         indata = load_settings(indata_file)
         self.sol_per_pop = indata["sol_per_pop"]
-        self.init_range_low = indata["init_range_low"]
-        self.init_range_high = indata["init_range_high"]
+        # self.init_range_low = indata["init_range_low"]
+        # self.init_range_high = indata["init_range_high"]
         self.mutation_percent_genes = indata["mutation_percent_genes"]
         self.num_generations = indata["num_generations"]
         self.num_parents_mating = indata["num_parents_mating"]
@@ -97,6 +97,13 @@ class ContrastOpt:
         thickness_range = indata["layer_thickness_range"]
 
         gene_space = []
+
+        ### t_range[2]==0: Genes take values from a continuous range
+        ### t_range[2]!=0: Genes take values from a discrete range
         for t_range in thickness_range:
-            gene_space.append({'low': t_range[0], 'high': t_range[1]})
+            if t_range[2] == 0:
+                gene_space.append({'low': t_range[0], 'high': t_range[1]})
+            else:
+                gene_space.append({'low': t_range[0], 'high': t_range[1], 'step': t_range[2]})
+
         return gene_space
