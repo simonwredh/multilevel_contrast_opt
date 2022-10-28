@@ -32,7 +32,8 @@ class ContrastOpt:
             delta_R = R_levels[1:-1] - R_levels[0:-2]
             mean_delta_R = np.mean(delta_R)
             max_delta_R = R_levels[-1]-R_levels[0]
-            fitness = max_delta_R - np.sqrt(np.sum((mean_delta_R-delta_R)**2))
+            w_mean_delta_R = 10 # Contrast between levels should weigh heigher
+            fitness = max_delta_R - w_mean_delta_R*np.sqrt(np.sum((mean_delta_R-delta_R)**2))
             # fitness = np.prod(delta_R)
             # for i_lvl in range(num_levels-1):
             #     fitness += R_levels[i_lvl+1]/R_levels[i_lvl]

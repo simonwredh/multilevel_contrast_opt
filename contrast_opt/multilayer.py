@@ -21,10 +21,13 @@ class MultiLayer:
         plt.legend()
         return fig, ax
 
-    def set_layer_thickness(self, t_layers):
-        self.layer_thickness = t_layers
-        self.layer_thickness_all = np.concatenate([[np.inf], t_layers, [np.inf]])
-        self.thickness_tensor = generate_thickness_tensor(self.nk_tensor, t_layers)
+    def set_layer_thickness(self, t_layers=None):
+        if t_layers is not None:
+            self.layer_thickness = t_layers
+            self.layer_thickness_all = np.concatenate([[np.inf], t_layers, [np.inf]])
+        else:
+            self.layer_thickness_all = np.concatenate([[np.inf], self.layer_thickness, [np.inf]])
+        self.thickness_tensor = generate_thickness_tensor(self.nk_tensor, self.layer_thickness)
 
 
     def init_multilayer(self, indata_file):
@@ -48,6 +51,7 @@ class MultiLayer:
         self.lambda_min = indata["lambda_min"]
         self.lambda_max = indata["lambda_max"]
         self.lambda_ref = indata["lambda_ref"]
+        self.layer_thickness = indata["layer_thickness"]
         self.wls = np.linspace(self.lambda_min,self.lambda_max, self.lambda_max-self.lambda_min)
 
     def print_multilayer(self):
