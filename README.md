@@ -8,7 +8,7 @@ Objective:
 
 Method:
 - Transfer matrix method to solve the Fresnel equations
-    - Currently using implementation from https://github.com/MLResearchAtOSRAM/tmm_fast
+    - Using implementation from https://github.com/MLResearchAtOSRAM/tmm_fast
 - Genetic algorithm for optimising the thickness of the independent layers in the multi-layer stack
     - Using PyGAD package https://pygad.readthedocs.io/en/latest/
 
