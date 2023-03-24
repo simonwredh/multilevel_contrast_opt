@@ -11,13 +11,27 @@ class MultiLayer:
         R = calc_R(self.nk_tensor, self.thickness_tensor, self.wls)
         self.reflectivity = R
         return R
+    
+    def calc_T(self):
+        T = calc_T(self.nk_tensor, self.thickness_tensor, self.wls)
+        self.transmission = T
+        return T
 
     def plot_R(self):
         fig, ax = plt.subplots()
         for i,R in enumerate(self.reflectivity):
             plt.plot(self.wls, R, label=self.levels[i])
         plt.xlabel("Wavelength (nm)")
-        plt.ylabel("Reflectivity")
+        plt.ylabel("Reflectance")
+        plt.legend()
+        return fig, ax
+    
+    def plot_T(self):
+        fig, ax = plt.subplots()
+        for i,T in enumerate(self.transmission):
+            plt.plot(self.wls, T, label=self.levels[i])
+        plt.xlabel("Wavelength (nm)")
+        plt.ylabel("Transmission")
         plt.legend()
         return fig, ax
 

@@ -24,6 +24,20 @@ def calc_R(nk_tensor, thickness_tensor, wls):
     R = res['R'][:,0,:]
     return R
 
+def calc_T(nk_tensor, thickness_tensor, wls):
+    """
+    nk_tensor: shape = [num_levels, num_layers, num_wls]
+    thickness_tensor: thickness in meters, shape = [num_levels, num_layers]
+    wls: wavelenghts in meters
+    """
+    nk_tensor[:,-1,:] = np.real(nk_tensor[:,-1,:]) # Force substrate to be lossless
+    nk_tensor[:,0,:] = np.real(nk_tensor[:,0,:]) # Force ambient to be lossless
+
+    theta = np.linspace(0, 0, 2) * (np.pi/180) # Theta must be a tensor with more than 1 element
+    res = tmm_vec('s',nk_tensor,thickness_tensor,theta,wls)
+    R = res['T'][:,0,:]
+    return R
+
 # def plot_R(wls,R):
 #     for i,y in enumerate(R):
 #         plt.plot(wls,y, label=levels[i])
