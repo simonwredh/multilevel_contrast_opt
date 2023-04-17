@@ -8,7 +8,7 @@ Objective:
 
 Method:
 - Transfer matrix method to solve the Fresnel equations
-    - Currently using implementation from https://github.com/MLResearchAtOSRAM/tmm_fast
+    - Using implementation from https://github.com/MLResearchAtOSRAM/tmm_fast
 - Genetic algorithm for optimising the thickness of the independent layers in the multi-layer stack
     - Using PyGAD package https://pygad.readthedocs.io/en/latest/
 
@@ -29,14 +29,15 @@ Constraints
 - Not implemented: total stack thickness
 
 ## Usage
+Note: Installing the dependencies from the environment.yml file seems to only work using a Linux system (WSL). 
 
-Create an environment and install necessary dependenceies:
+Create an environment and install necessary dependencies:
 
     conda env create --name contrast_opt --file environment.yml
 
     conda activate contrast_opt
 
-Install contrast_opt as a package:
+Install contrast_opt as a package. In the main directory, run:
 
     pip install .
 
