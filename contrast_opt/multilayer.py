@@ -8,14 +8,43 @@ class MultiLayer:
         pass
 
     def calc_R(self):
-        R = calc_R(self.nk_tensor, self.thickness_tensor, self.wls)
+        res = tmm_calc(self.nk_tensor, self.thickness_tensor, self.wls)
+        R = res['R'][:,0,:]
         self.reflectivity = R
         return R
     
+    def calc_r(self):
+        res = tmm_calc(self.nk_tensor, self.thickness_tensor, self.wls)
+        r = res['r'][:,0,:]
+        self.r = r
+        return r
+    
+    def calc_argR(self):
+        res = tmm_calc(self.nk_tensor, self.thickness_tensor, self.wls)
+        r = res['r'][:,0,:]
+        argR = np.pi+np.angle(r)
+        self.argR = argR
+        return argR
+
     def calc_T(self):
-        T = calc_T(self.nk_tensor, self.thickness_tensor, self.wls)
+        res = tmm_calc(self.nk_tensor, self.thickness_tensor, self.wls)
+        T = res['T'][:,0,:]
         self.transmission = T
         return T
+    
+    def calc_argT(self):
+        res = tmm_calc(self.nk_tensor, self.thickness_tensor, self.wls)
+        t = res['t'][:,0,:]
+        argT = np.pi+np.angle(t)
+        self.argT = argT
+        return argT
+
+    def calc_t(self):
+        res = tmm_calc(self.nk_tensor, self.thickness_tensor, self.wls)
+        t = res['t'][:,0,:]
+        self.t = t
+        return t
+
 
     def plot_R(self):
         fig, ax = plt.subplots()
@@ -26,12 +55,31 @@ class MultiLayer:
         plt.legend()
         return fig, ax
     
+    def plot_argR(self):
+        fig, ax = plt.subplots()
+        for i,argR in enumerate(self.argR):
+            plt.plot(self.wls, argR*180/np.pi, label=self.levels[i])
+        plt.xlabel("Wavelength (nm)")
+        plt.ylabel("Reflection phase (deg)")
+        plt.legend()
+        return fig, ax
+
+
     def plot_T(self):
         fig, ax = plt.subplots()
         for i,T in enumerate(self.transmission):
             plt.plot(self.wls, T, label=self.levels[i])
         plt.xlabel("Wavelength (nm)")
-        plt.ylabel("Transmission")
+        plt.ylabel("Transmittance")
+        plt.legend()
+        return fig, ax
+    
+    def plot_argT(self):
+        fig, ax = plt.subplots()
+        for i,argT in enumerate(self.argT):
+            plt.plot(self.wls, argT*180/np.pi, label=self.levels[i])
+        plt.xlabel("Wavelength (nm)")
+        plt.ylabel("Transmission phase (deg)")
         plt.legend()
         return fig, ax
 
@@ -66,6 +114,7 @@ class MultiLayer:
         self.lambda_max = indata["lambda_max"]
         self.lambda_ref = indata["lambda_ref"]
         self.layer_thickness = indata["layer_thickness"]
+        self.optimise_quantity = indata["optimise_quantity"]
         self.wls = np.linspace(self.lambda_min,self.lambda_max, self.lambda_max-self.lambda_min)
 
     def print_multilayer(self):

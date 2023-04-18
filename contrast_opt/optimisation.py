@@ -14,32 +14,80 @@ class ContrastOpt:
         self.num_levels = len(multilayer.levels)
         self.num_layers = len(multilayer.layers)
         self.optimal_thickness = None
+        self.optimise_quantity = multilayer.optimise_quantity
 
-    def my_fitness_func(self):
-        def fitness_func(solution, solution_idx):
-            thickness_tensor = generate_thickness_tensor(self.nk_tensor, solution)
-            level_spectra = calc_R(self.nk_tensor, thickness_tensor, self.wls)
-            R_levels = []
-            # Calculate the fitness based on the spectra
-            fitness = 0
-
-            # Option 1: at a single wavelength
-            i_wl = self.lambda_ref_index
-            for i_lvl in range(self.num_levels):
-                R_levels.append(level_spectra[i_lvl,i_wl])
-            R_levels.sort()
-            R_levels = np.array(R_levels)
-            delta_R = R_levels[1:-1] - R_levels[0:-2]
-            mean_delta_R = np.mean(delta_R)
-            max_delta_R = R_levels[-1]-R_levels[0]
-            w_mean_delta_R = 10 # Contrast between levels should weigh heigher
-            fitness = max_delta_R - w_mean_delta_R*np.sqrt(np.sum((mean_delta_R-delta_R)**2))
-            # fitness = np.prod(delta_R)
-            # for i_lvl in range(num_levels-1):
-            #     fitness += R_levels[i_lvl+1]/R_levels[i_lvl]
-
-            # Option 2: average over wavelength range
-            return fitness
+    def my_fitness_func(self, optimise_what="R"):
+        if self.optimise_quantity is not None:
+            optimise_what = self.optimise_quantity
+        if optimise_what == "R":
+            def fitness_func(ga_instance, solution, solution_idx):
+                thickness_tensor = generate_thickness_tensor(self.nk_tensor, solution)
+                level_spectra = calc_R(self.nk_tensor, thickness_tensor, self.wls)
+                R_levels = []
+                # Calculate the fitness based on the spectra
+                fitness = 0
+                # Optimise at a single wavelength
+                i_wl = self.lambda_ref_index
+                for i_lvl in range(self.num_levels):
+                    R_levels.append(level_spectra[i_lvl,i_wl])
+                R_levels.sort()
+                R_levels = np.array(R_levels)
+                delta_R = R_levels[1:-1] - R_levels[0:-2]
+                mean_delta_R = np.mean(delta_R)
+                max_delta_R = R_levels[-1]-R_levels[0]
+                w_mean_delta_R = 10 # Contrast between levels should weigh heigher
+                fitness = max_delta_R - w_mean_delta_R*np.sqrt(np.sum((mean_delta_R-delta_R)**2))
+                # fitness = np.prod(delta_R)
+                # for i_lvl in range(num_levels-1):
+                #     fitness += R_levels[i_lvl+1]/R_levels[i_lvl]
+                return fitness
+            
+        elif optimise_what == "argR":
+                def fitness_func(ga_instance, solution, solution_idx):
+                    thickness_tensor = generate_thickness_tensor(self.nk_tensor, solution)
+                    level_spectra = calc_argR(self.nk_tensor, thickness_tensor, self.wls)
+                    levels = []
+                    fitness = 0 # Calculate the fitness based on the spectra
+                    # Optimise at a single wavelength
+                    i_wl = self.lambda_ref_index
+                    for i_lvl in range(self.num_levels):
+                        levels.append(level_spectra[i_lvl,i_wl])
+                    levels.sort()
+                    levels = np.array(levels)
+                    argR_targets = np.linspace(0,2*np.pi,num=len(levels), endpoint=False) # For len(levels)=4: targetR=[0, pi/2, pi, 3pi/4]
+                    delta_targets = 0
+                    for i, level in enumerate(levels):
+                        delta_target_1 = np.abs(argR_targets[i]-levels[i])
+                        delta_target_2 = 2*np.pi - delta_target_1
+                        delta_targets = delta_targets + min(delta_target_1, delta_target_2) # Shortest arc length
+                    delta_levels = levels[1:-1] - levels[0:-2]
+                    mean_delta_levels = np.mean(delta_levels)
+                    fitness = -delta_targets - 0*np.sqrt(np.sum((mean_delta_levels-delta_levels)**2))
+                    return fitness
+                
+        elif optimise_what == "argT":
+                def fitness_func(ga_instance, solution, solution_idx):
+                    thickness_tensor = generate_thickness_tensor(self.nk_tensor, solution)
+                    level_spectra = calc_argT(self.nk_tensor, thickness_tensor, self.wls)
+                    levels = []
+                    fitness = 0 # Calculate the fitness based on the spectra
+                    # Optimise at a single wavelength
+                    i_wl = self.lambda_ref_index
+                    for i_lvl in range(self.num_levels):
+                        levels.append(level_spectra[i_lvl,i_wl])
+                    levels.sort()
+                    levels = np.array(levels)
+                    argR_targets = np.linspace(0,2*np.pi,num=len(levels), endpoint=False) # For len(levels)=4: targetR=[0, pi/2, pi, 3pi/4]
+                    delta_targets = 0
+                    for i, level in enumerate(levels):
+                        delta_target_1 = np.abs(argR_targets[i]-levels[i])
+                        delta_target_2 = 2*np.pi - delta_target_1
+                        delta_targets = delta_targets + min(delta_target_1, delta_target_2) # Shortest arc length
+                    delta_levels = levels[1:-1] - levels[0:-2]
+                    mean_delta_levels = np.mean(delta_levels)
+                    fitness = -delta_targets - 0*np.sqrt(np.sum((mean_delta_levels-delta_levels)**2))
+                    return fitness
+                
         return fitness_func
 
     def init_ga(self):
@@ -53,6 +101,7 @@ class ContrastOpt:
 
 
         self.ga_instance = pygad.GA(num_generations=self.num_generations,
+                            parent_selection_type="rank",
                             num_parents_mating=self.num_parents_mating, 
                             fitness_func=fitness_func,
                             sol_per_pop=self.sol_per_pop, 
